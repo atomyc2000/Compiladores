@@ -10,5 +10,5 @@ package lexico;
  * @author pedroelias
  */
 public class Token {
-    
+    int Andrey;
 }
