@@ -8,6 +8,9 @@
 package lexico;
 import java.io.*;
 import java.util.*;
+import java.io.IOExceptiom;
+import java.io.FileReader;
+
 /**
  *
  * @author pedroelias
@@ -46,7 +49,6 @@ public class Lexer {
         reserve(new Word("while",Tag.WHILE));
         reserve(new Word("read",Tag.READ));
         reserve(new Word("write",Tag.WRITE));
-        reserve(new Word("if",Tag.IF));
 
 
     }
@@ -64,7 +66,7 @@ public class Lexer {
     public Token scan() throws IOExceptions{
         //desconsidea delimetadors na estrada
         for (;;readch()){
-            if (ch=='' || ch=='\t' || ch=="\r" || ch=="\b") continue;
+            if (ch=='' || ch=='\t' || ch=='\r' || ch=='\b') continue;
             else if (ch=='\n') line ++; //conta linha
             else break;
         }
@@ -89,7 +91,7 @@ public class Lexer {
                 else return new Token('!');         // !
         }
         //Numeros  (constante Numericas)
-        if (character.isDigit(ch)){
+        if (Character.isDigit(ch)){
             int value =0;
             do {
                 value = 10*value + Character.digit(ch, 10);
