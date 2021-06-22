@@ -10,5 +10,11 @@ package lexico;
  * @author pedroelias
  */
 public class Token {
-    int Andrey;
+    public final int tag;
+    public token (int t){
+        tag=t;
+    }
+    public String toString(){
+        return ""+tag;
+    }
 }

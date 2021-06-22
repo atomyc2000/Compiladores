@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-        
+
 package lexico;
 import java.io.*;
 import java.util.*;
@@ -17,15 +17,15 @@ public class Lexer {
     public static int line = 1;
     private char ch = ' ';
     private FileReader file;
-    
+
     private Hashtable words = new Hashtable();
-    
+
     private void reserve(Word w){
         words.put(w.getLexeme(), w);
     }
-    
+
     public Lexer(String fileName) throws FileNotFoundException{
-    
+
         try{
             file = new FileReader(fileName);
         }
@@ -33,7 +33,7 @@ public class Lexer {
             System.out.println("Arquivo não encontrado");
             throw e;
         }
-        
+
         reserve(new Word("if",Tag.IF));
         reserve(new Word("class",Tag.CLASS));
         reserve(new Word("int",Tag.INT));
@@ -47,10 +47,74 @@ public class Lexer {
         reserve(new Word("read",Tag.READ));
         reserve(new Word("write",Tag.WRITE));
         reserve(new Word("if",Tag.IF));
-        
-        
+
+
     }
-    
-    
+//ler arquivos
+    private void readch() throws IOExceptiom{
+        ch=(char)file.read;
+    }
+//leitura do proximo caractere
+    private boolean readech(char c) throws IOException{
+        readch();
+        if(ch!=c) return false;
+        ch='';  //se verdade retona true e limpa ch
+        return true;
+    }
+    public Token scan() throws IOExceptions{
+        //desconsidea delimetadors na estrada
+        for (;;readch()){
+            if (ch=='' || ch=='\t' || ch=="\r" || ch=="\b") continue;
+            else if (ch=='\n') line ++; //conta linha
+            else break;
+        }
+        Sitch (ch){ //operador
+            case "&":
+                if (readch('&')) return Word.and;   // &&
+                else return new Token('&');         // &
+            case '|':
+                if (readch('|')) return Word.or;    // ||
+                else return new Token('|');         // |
+            case'=':
+                if(readch('='))return Word.eq;      // ==
+                else return new Token('=');         // =
+            case'<':
+                if (readch('=')) return Word.le;    // <=
+                else return new Token('<');         // <
+            case '>':
+                if (readch('=')) return Word.ge;    // >=
+                else return new Token('>');         // >
+            case '!':
+                if (readch('='))return Word.ne;     // !=
+                else return new Token('!');         // !
+        }
+        //Numeros  (constante Numericas)
+        if (character.isDigit(ch)){
+            int value =0;
+            do {
+                value = 10*value + Character.digit(ch, 10);
+                readch();
+            } while (Character.isDigit(ch));
+            return new Num(value);
+        }
+        //identificadores
+        if(Character.isLetter(ch)){
+            stringBuffer sb = new stringBuffer();
+            do {
+                sb.append(ch);
+                readch();
+            }while (Character.isLetterOrDigit(ch));
+            String s=sb.toString();
+            Word w =(Word) Word.get(s);
+            if(w)=null) return w;       //palavra já existente na Hashtab
+            w= new Word(s,Tag.ID);
+            words.put(s,w);             //inclui na Hashtab
+            return w;
+        }
+        //Carateres não especificados
+        Token t = new Token(ch);
+        ch='';
+        return t;
+    }
 
 }
